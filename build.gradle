@@ -20,6 +20,7 @@ ext {
     pgDriverVersion = '42.7.5'
     webMvcUiVersion = '2.8.13'
     liquibaseVersion = '4.33.0'
+    apacheCommonsVersion = '3.18.0'
 }
 
 dependencies {
@@ -29,7 +30,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.postgresql:postgresql:${pgDriverVersion}")
     implementation("org.mapstruct:mapstruct:${mapstructVersion}")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${webMvcUiVersion}")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${webMvcUiVersion}") {
+        exclude group: 'org.apache.commons', module: 'commons-lang3'
+    }
+    implementation("org.apache.commons:commons-lang3:${apacheCommonsVersion}")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.liquibase:liquibase-core")
     annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
