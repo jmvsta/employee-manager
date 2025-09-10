@@ -8,10 +8,11 @@ spring:
     username: test_user
     password: test_password
     driver-class-name: org.h2.Driver
-
+  liquibase:
+    enabled: false
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 

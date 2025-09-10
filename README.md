@@ -23,11 +23,14 @@ docker-compose up --build
 
 Create a `.env` file in main directory with the following variables:
 
-SECURITY_USER=secure_user
-SECURITY_PASSWORD=secure_password
-DB_URL=jdbc:postgresql://db:5432/prod_db?currentSchema=employee_prod
-DB_USER=secure_db_user
-DATASOURCE_PASSWORD=secure_db_password
+```
+SECURITY_USER=
+SECURITY_PASSWORD=
+DB_USER=
+DB_SCHEMA=
+DB_PASSWORD=
+DB_NAME=
+```
 
 ## Endpoints 
 
@@ -88,7 +91,7 @@ Request body:
   "id": 1,
   "name": "test",
   "team": "test",
-  "teamLead": "test
+  "teamLead": "test"
 }
 ```
 Creates employee
@@ -104,7 +107,7 @@ Request body:
   "id": 1,
   "name": "test",
   "team": "test",
-  "teamLead": "test
+  "teamLead": "test"
 }
 ```
 Updates employee partially 
