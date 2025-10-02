@@ -1,0 +1,43 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${keycloak.url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+          issuer-uri: ${keycloak.url}/realms/${keycloak.realm}
+  cloud:
+    gateway:
+      routes:
+        - id: admin-service
+          uri: lb://admin-service
+          predicates:
+            - Path=/api/admin/**
+        - id: employee-service
+          uri: lb://employee-service
+          predicates:
+            - Path=/api/employee/**
+  jmx:
+    enabled: false
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.xml
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    root: INFO
+
+keycloak:
+  url: ${KC_URL}
+  realm: ${KC_REALM}
+  client-id: ${KC_CLIENT_ID}
+  client-secret: ${KC_CLIENT_SECRET}

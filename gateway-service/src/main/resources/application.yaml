@@ -1,0 +1,41 @@
+spring:
+  webflux:
+    base-path: /api/v1
+
+  profiles:
+    active: dev
+
+  application:
+    name: employee-service
+
+  jmx:
+    enabled: false
+
+  jackson:
+    default-property-inclusion: non_null
+
+server:
+  port: 8080
+
+springdoc:
+  packages-to-scan: com.hyperoptic.controller
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: INFO
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always

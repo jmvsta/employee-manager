@@ -1,0 +1,39 @@
+# gateway-service-deployment.yaml
+
+# --- Deployment ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-service
+  labels:
+    app: gateway-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-service
+  template:
+    metadata:
+      labels:
+        app: gateway-service
+    spec:
+      containers:
+        - name: gateway-service-container
+          image: localhost:5000/gateway-service:latest
+          ports:
+            - containerPort: 8080
+
+---
+# --- Service ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-service-svc
+spec:
+  selector:
+    app: gateway-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: NodePort
