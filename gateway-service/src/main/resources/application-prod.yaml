@@ -1,32 +1,29 @@
 spring:
   security:
-    user:
-      name: ${SECURITY_USER}
-      password: ${SECURITY_PASSWORD}
-  datasource:
-    url: jdbc:postgresql://db:5432/prod_db?currentSchema=prod_schema
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: none
-    show-sql: true
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${keycloak.url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+          issuer-uri: ${keycloak.url}/realms/${keycloak.realm}
+  cloud:
+    gateway:
+      routes:
+        - id: admin-service
+          uri: lb://admin-service
+          predicates:
+            - Path=/api/v1/admin/**
+        - id: employee-service
+          uri: lb://employee-service
+          predicates:
+            - Path=/api/v1/employee/**
 server:
   port: 80
 logging:
   level:
     root: INFO
 
-cors:
-  allowed-origins:
-    - "http://localhost:3000"
-  allowed-methods:
-    - GET
-    - POST
-    - PATCH
-    - DELETE
-    - OPTIONS
-  allowed-headers:
-    - "*"
-  allow-credentials: true
+keycloak:
+  url: ${KC_URL}
+  realm: ${KC_REALM}
+  client-id: ${KC_CLIENT_ID}
+  client-secret: ${KC_CLIENT_SECRET}

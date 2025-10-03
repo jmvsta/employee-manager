@@ -11,30 +11,18 @@ spring:
         - id: admin-service
           uri: lb://admin-service
           predicates:
-            - Path=/api/admin/**
+            - Path=/api/v1/admin/**
         - id: employee-service
           uri: lb://employee-service
           predicates:
-            - Path=/api/employee/**
+            - Path=/api/v1/employee/**
   jmx:
     enabled: false
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver
-  liquibase:
-    change-log: classpath:db/changelog/changelog-master.xml
-    enabled: true
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: true
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 logging:
   level:
-    root: INFO
+    root: DEBUG
+    org.springframework.security: DEBUG
 
 keycloak:
   url: ${KC_URL}

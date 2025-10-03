@@ -5,6 +5,7 @@ import com.jmvstv_v.dto.KeycloakTokenResponse;
 import com.jmvstv_v.dto.LoginRequest;
 import com.jmvstv_v.dto.RefreshTokenRequest;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -50,14 +51,14 @@ public class KeycloakService {
                 .bodyToMono(KeycloakTokenResponse.class);
     }
 
-    public Mono<Void> logout(RefreshTokenRequest refreshTokenRequest) {
+    public Mono<Void> logout(Jwt jwt, RefreshTokenRequest refreshTokenRequest) {
         return keycloakWebClient.post()
                 .uri("/realms/{realm}/protocol/openid-connect/logout", props.realm())
+                .header("Authorization", "Bearer " + jwt.getTokenValue())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(BodyInserters
                         .fromFormData("client_id", props.clientId())
                         .with("client_secret", props.clientSecret())
-                        .with("grant_type", "refresh_token")
                         .with("refresh_token", refreshTokenRequest.refreshToken()))
                 .retrieve()
                 .bodyToMono(Void.class);

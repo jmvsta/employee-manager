@@ -44,5 +44,6 @@ bin/
 /**/.env
 /**/scripts/**
 /**/application-local.yaml
+/**/realms/**
 /.idea/**
 /.gradle/**
