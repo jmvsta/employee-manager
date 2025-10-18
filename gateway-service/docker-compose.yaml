@@ -1,9 +1,7 @@
 version: '3.9'
 services:
   app:
-    build:
-      context: ../
-      dockerfile: gateway-service/Dockerfile
+    build: .
     environment:
       KC_URL: ${KC_URL}
       KC_REALM: ${KC_REALM}
@@ -12,6 +10,7 @@ services:
       SPRING_PROFILES_ACTIVE: ${PROFILE}
     ports:
       - "8080:8080"
+      - "8081:8081"
     depends_on:
       keycloak:
         condition: service_healthy

@@ -1,6 +1,6 @@
-package com.jmvstv_v.config;
+package com.jmvstv_v.configuration;
 
-import com.jmvstv_v.handler.AuthHandler;
+import com.jmvstv_v.component.AuthHandler;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

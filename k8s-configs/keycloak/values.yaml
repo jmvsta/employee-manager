@@ -1,0 +1,20 @@
+keycloak:
+  namespace: keycloak
+  createNamespace: false
+  createServiceAccount: false
+  serviceAccountName: keycloak-sa
+  image: quay.io/keycloak/keycloak:24.0
+  httpPort: 8080
+  
+  database:
+    type:
+    schema:
+    username:
+    password:
+
+  admin:
+    user:
+    password:
+
+externalSecrets:
+  enabled: false

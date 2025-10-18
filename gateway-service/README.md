@@ -1,4 +1,4 @@
-# EmployeeService
+# gateway-service
 This service enables CRUD operations over REST for Employee entities
 
 ## Running tests
@@ -24,12 +24,18 @@ docker-compose up --build
 Create a `.env` file in main directory with the following variables:
 
 ```
-SECURITY_USER=
-SECURITY_PASSWORD=
+PROFILE=
 DB_USER=
 DB_SCHEMA=
 DB_PASSWORD=
 DB_NAME=
+KC_HTTP_PORT=
+KC_URL=
+KC_REALM=
+KC_CLIENT_ID=
+KC_CLIENT_SECRET=
+KC_ADMIN=
+KC_ADMIN_PASSWORD=
 ```
 
 ## Endpoints 
@@ -48,126 +54,64 @@ GET /actuator/info
 ````
 Returns the information about the service.
 
-### Get All Employees
+### Exchange login, password on jwt token
 
 ```
-GET /api/v1/employees
-```
-Returns all employees
-
-### Get Employee by id
-
-```
-GET /api/v1/employees/:id
-```
-Returns employee by id
-
-
-### Find Employees with filter
-
-```
-POST /api/v1/employees/find
+POST /auth/login
 ```
 Request body:
 ```json
 {
-  "name": "test",
-  "teamName": "test",
-  "teamLeadName": "test",
-  "teamLeadId": 1,
-  "teamLeadsOnly": true
+  "username": "test",
+  "password": "test"
 }
 ```
-Filteres employees by specified filter
 
-### Create Employee
+### Exchange login, password on jwt token
 
 ```
-POST /api/v1/employees
+POST /auth/login
 ```
 Request body:
 ```json
 {
-  "id": 1,
-  "name": "test",
-  "team": "test",
-  "teamLead": "test"
+  "username": "test",
+  "password": "test"
 }
 ```
-Creates employee
 
-### Update Employee by id
+### Exchange refresh token on jwt token
 
 ```
-PATCH /api/v1/employees/:id
+POST /auth/refresh
 ```
 Request body:
 ```json
 {
-  "id": 1,
-  "name": "test",
-  "team": "test",
-  "teamLead": "test"
+  "refreshToken": "test"
 }
 ```
-Updates employee partially 
-
-### Delete Employee by id
+### Get user info
 
 ```
-DELETE /api/v1/employees/:id
+GET /auth/me
 ```
-Removes employee 
-
-### Get Team by id
-
+Request headers:
 ```
-GET /api/v1/teams/:id
+Authorization: Bearer <token>
 ```
-Returns team by id 
-
-### Get All Teams
+### Logout from the system
 
 ```
-GET /api/v1/teams
+POST /auth/logout
 ```
-Returns all teams
-
-### Create Team
-
+Request headers:
 ```
-POST /api/v1/teams
+Authorization: Bearer <token>
 ```
 Request body:
 ```json
 {
-  "id": 1,
-  "name": "test",
-  "team": "test",
-  "teamLeadId": 1
+  "refreshToken": "test"
 }
 ```
-Creates team
-
-### Update Team by id
-
-```
-PATCH /api/v1/teams/:id
-```
-Request body:
-```json
-{
-  "id": 1,
-  "name": "test",
-  "team": "test",
-  "teamLeadId": 1
-}
-```
-Updates team partially 
-
-### Delete Team by id
-
-```
-DELETE /api/v1/teams/:id
-```
-Removes team 

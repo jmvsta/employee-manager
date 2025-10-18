@@ -1,0 +1,55 @@
+replicaCount: 1
+createNamespace: true
+namespace: gateway
+
+image:
+  repository: gateway-service
+  tag: "v1.0.0"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+  actuatorPort: 8081
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+ingress:
+  enabled: true
+  host: gateway.example.com
+  tlsSecretName: gateway-tls
+
+prometheus:
+  enabled: true
+  path: /metrics
+  port: 8080
+
+spring:
+  profilesActive: dev
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+
+serviceAccount:
+  create: true
+  name: gateway-service-sa
+
+networkPolicy:
+  enabled: true
+
+externalSecrets:
+  enabled: true
+
+keycloak:
+  url: "http://keycloak.keycloak.svc.cluster.local:8080"
+  realm: "master"
+  clientId:
+  clientSecret:
