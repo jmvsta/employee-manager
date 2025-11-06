@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gateway-service.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/instance: gateway
+    app.kubernetes.io/version: {{ .Values.image.tag | quote }}
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "gateway-service.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "gateway-service.name" . }}
+      annotations:
+        prometheus.io/scrape: "{{ .Values.prometheus.enabled }}"
+        prometheus.io/port: "{{ .Values.prometheus.port }}"
+        prometheus.io/path: "{{ .Values.prometheus.path }}"
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      containers:
+        - name: {{ include "gateway-service.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+          env:
+            - name: KC_URL
+              value: "{{ .Values.keycloak.url }}"
+            - name: KC_REALM
+              value: "{{ .Values.keycloak.realm }}"
+            - name: KC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: gateway-secret
+                  key: kc_client_id
+            - name: KC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: gateway-secret
+                  key: kc_client_secret
+            - name: SPRING_PROFILES_ACTIVE
+              value: "{{ .Values.spring.profilesActive }}"
+            - name: TZ
+              value: "UTC"
+          resources:
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: {{ .Values.service.actuatorPort }}
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: {{ .Values.service.actuatorPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          securityContext:
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+            runAsUser: {{ .Values.securityContext.runAsUser }}

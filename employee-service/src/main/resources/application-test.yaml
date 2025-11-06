@@ -1,0 +1,21 @@
+spring:
+  security:
+    user:
+      name: test_user
+      password: test_password
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    username: test_user
+    password: test_password
+    driver-class-name: org.h2.Driver
+  liquibase:
+    enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    root: WARN

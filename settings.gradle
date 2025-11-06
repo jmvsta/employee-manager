@@ -1,2 +1,5 @@
-rootProject.name = 'EmployeeService'
+rootProject.name = 'employee-manager'
 
+include 'employee-service'
+include 'gateway-service'
+include 'admin-service'

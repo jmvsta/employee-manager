@@ -1,0 +1,60 @@
+pipeline {
+    agent {
+        kubernetes {
+            label 'jenkins-agent'
+            defaultContainer 'jnlp'
+            yaml '''
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: jnlp
+    image: carlossg/jenkins-agent-dind-kubectl
+    command:
+    - sleep
+    args:
+    - 99d
+  - name: docker
+    image: docker:dind
+    securityContext:
+      privileged: true
+'''
+        }
+    }
+
+    environment {
+        INTERNAL_REGISTRY = 'registry-service:5000'
+    }
+
+    stages {
+        stage('Build & Push Docker Image') {
+            steps {
+                container('jnlp') {
+                    script {
+                        def imageName = "${INTERNAL_REGISTRY}/gateway-service:latest"
+                        withEnv(["DOCKER_HOST=tcp://localhost:2375"]) {
+                            def customImage = docker.build(imageName, "-f gateway-service/Dockerfile .")
+                            customImage.push()
+                        }
+
+                        echo "Successfully built and pushed image: ${imageName}"
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                container('jnlp') {
+                    script {
+                        echo 'Deploying gateway-service to the same cluster...'
+                        sh "kubectl apply -f gateway-service/deployment.yaml"
+                        sh "kubectl rollout status deployment/gateway-service"
+
+                        echo 'Deployment successful!'
+                    }
+                }
+            }
+        }
+    }
+}
