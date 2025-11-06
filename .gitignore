@@ -41,6 +41,9 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-/.env
+/**/.env
+/**/scripts/**
+/**/application-local.yaml
+/**/realms/**
 /.idea/**
 /.gradle/**

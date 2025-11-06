@@ -1,48 +1,39 @@
+buildscript {
+    ext {
+        mapstructVersion = '1.6.3'
+        pgDriverVersion = '42.7.5'
+        webFluxUiVersion = '2.8.14'
+        liquibaseVersion = '4.33.0'
+        apacheCommonsVersion = '3.18.0'
+        springCloudVersion = '4.3.1'
+    }
+}
+
+
 plugins {
     id("java")
-    id("org.springframework.boot") version "3.4.5"
-    id("io.spring.dependency-management") version "1.1.7"
+    id("io.spring.dependency-management") version "1.1.7" apply false
 }
 
-springBoot {
-    buildInfo()
-}
-
-group = 'com.hyperoptic'
+group = 'com.jmvstv_v'
 version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
-ext {
-    mapstructVersion = '1.6.3'
-    pgDriverVersion = '42.7.5'
-    webMvcUiVersion = '2.8.13'
-    liquibaseVersion = '4.33.0'
-    apacheCommonsVersion = '3.18.0'
-}
+subprojects {
+    apply plugin: 'java'
 
-dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.postgresql:postgresql:${pgDriverVersion}")
-    implementation("org.mapstruct:mapstruct:${mapstructVersion}")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${webMvcUiVersion}") {
-        exclude group: 'org.apache.commons', module: 'commons-lang3'
+    group = 'com.jmvstv_v'
+    version = '1.0.0'
+    sourceCompatibility = '21'
+
+    repositories {
+        mavenCentral()
     }
-    implementation("org.apache.commons:commons-lang3:${apacheCommonsVersion}")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.liquibase:liquibase-core")
-    annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.mockito:mockito-core")
-    testImplementation("org.springframework.security:spring-security-test")
-    testImplementation("com.h2database:h2")
-}
 
-test {
-    useJUnitPlatform()
+    test {
+        useJUnitPlatform()
+    }
 }

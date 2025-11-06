@@ -1,0 +1,46 @@
+spring:
+  webflux:
+    base-path: /api/v1
+
+  profiles:
+    active: dev
+
+  application:
+    name: employee-service
+
+  jmx:
+    enabled: false
+
+  jackson:
+    default-property-inclusion: non_null
+    property-naming-strategy: SNAKE_CASE
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+
+server:
+  port: 8080
+
+springdoc:
+  packages-to-scan: com.jmvstv_v.component
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: INFO
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always

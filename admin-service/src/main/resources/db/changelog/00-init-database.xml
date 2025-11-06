@@ -1,0 +1,43 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.23.xsd">
+
+    <changeSet id="init-database" author="jmvstv_v">
+        <createSequence sequenceName="team_seq" schemaName="keycloak_schema" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="employee_seq" startValue="1" incrementBy="1"/>
+
+        <createTable tableName="team" schemaName="keycloak_schema">
+            <column name="id" type="BIGINT" defaultValueSequenceNext="team_seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="teamlead_id" type="BIGINT"/>
+        </createTable>
+
+        <createTable tableName="employee" schemaName="keycloak_schema">
+            <column name="id" type="BIGINT" defaultValueSequenceNext="employee_seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="team_id" type="BIGINT">
+                <constraints nullable="true" foreignKeyName="fk_employee_team" references="team(id)"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="team"
+                baseColumnNames="teamlead_id"
+                referencedTableName="employee"
+                referencedColumnNames="id"
+                baseTableSchemaName="keycloak_schema"
+                referencedTableSchemaName="keycloak_schema"
+                constraintName="fk_team_teamlead"/>
+    </changeSet>
+
+</databaseChangeLog>

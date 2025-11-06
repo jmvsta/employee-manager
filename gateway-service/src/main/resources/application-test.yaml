@@ -1,0 +1,17 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${keycloak.url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+          issuer-uri: ${keycloak.url}/realms/${keycloak.realm}
+logging:
+  level:
+    root: DEBUG
+    org.springframework.security: DEBUG
+
+keycloak:
+  url:
+  realm:
+  client-id:
+  client-secret:
